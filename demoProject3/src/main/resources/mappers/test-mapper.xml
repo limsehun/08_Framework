@@ -5,13 +5,16 @@
 	 <!-- 해당 태그는 무조건 삭제!! -->
 	 <!--<cache-ref namespace=""/>-->
 
-	<!-- 수행 하려는 SQL 구문 태그 작성-->
-	<select id="" parameterType="" resultType="">SQL 작성</select>
-	
-	<insert id="" parameterType="">SQL 작성</insert>
-	
-	<update id="" parameterType="">SQL 작성</update>
-	
-	<delete id="" parameterType="">SQL 작성</delete>
+	 <!-- 사용자 이름 조회 --> 	
+	 <select id="selectUserName" 
+	 	parameterType="_int"
+	 	resultType="string">
+	 
+	 SELECT USER_NAME
+	 FROM TB_USER
+	 WHERE USER_NO = #{userNo}
+		
+	 </select>
+
   
 </mapper>
