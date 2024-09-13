@@ -72,6 +72,23 @@ public String searchTitle(int todoNo) {
 	return mapper.searchTitle(todoNo);
 }
 	
+
+@Override
+public int getTotalCount() {
+	return mapper.getTotalCount();
+}
+
+@Override
+public int getCompleteCount() {
+	return mapper.selectCompleteCount();
+}
+
+@Override
+public List<Todo> getTodoList() {
+	return mapper.selectTodoList();
+}
+
+
 }
 
 
