@@ -189,7 +189,7 @@ public class MemberController {
 		@ResponseBody
 		@GetMapping("nicknameCheck")
 		public int nicknameCheck(
-				@RequestParam("nickName") String nickname) {
+				@RequestParam("nickname") String nickname) {
 			return service.nicknameCheck(nickname);
 		}
 		
