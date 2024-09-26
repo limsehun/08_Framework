@@ -270,12 +270,12 @@ document.querySelector("#popupClose").addEventListener("click",()=>{
 // ----------------------------------------------------------------------------------
 
 /* 완료 여부 변경 버튼 클릭 시 */
-const changeComplete = document.querySelector("#changeComplete");
 
 changeComplete.addEventListener("click",()=>{
-
+    
     // 팝업 레이어에 작성된 todoNo, todoComplete 값(내용) 얻어오기
     const todoNo = document.querySelector("#popupTodoNo").innerText;
+    const changeComplete = document.querySelector("#changeComplete");
 
 
   // 비동기로 완료 여부 변경

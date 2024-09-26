@@ -102,11 +102,67 @@ const selectMemberList = () => {
       loginBtn.innerText = "로그인";
       th4.append(loginBtn);
 
+      // 만약 탈퇴 상태인 경우 로그인 버튼 비활성화
+      if(member.memberDelFl == 'Y'){
+        loginBtn.disabled = true;
+      }else{
+
+        // 탈퇴 상태가 아닌 경우 만들어진 로그인 버튼에 클릭 이벤트 추가
+        loginBtn.addEventListener("click", () => {
+
+          // body태그 제일 마지막에 form태그를 추가해 제출하는 형식으로 코드 작성
+          // => POST방식을 요청을 사용하기 위해서
+
+          const form = document.createElement("form");
+          form.action = "/directLogin";
+          form.method = "POST";
+
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "memberNo";
+          input.value = member.memberNo;
+
+          form.append(input); // form 자식으로 input 추가
+
+          // body 태그 자식으로 form 추가
+          document.querySelector("body").append(form);
+
+          form.submit(); // 제출
+
+        })
+      }
+
+
       // th > button 만들어서 "비밀번호 초기화" 글자 세팅
       const th5 = document.createElement("th");
       const initBtn = document.createElement("button");
       initBtn.innerText = "비밀번호 초기화";
       th5.append(initBtn);
+
+      /* ajax(비동기) 요청 시 사용 가능한 데이터 전발 방식
+        (REST API와 관련됨)
+        GET    : 조회   (SELECT)
+        POST   : 삽입   (INSERT)
+        PUT    : 수정   (UPDATE)
+        DELETE : 삭제   (DELETE)
+      */
+      initBtn.addEventListener("click", () => {
+        fetch("/resetPw",{
+          method  : "POST",//POST방식 요청
+          headers : {"content-type" : "application/json"},
+           // 제출되는 데이터는 json형태라고 정의
+          body : member.memberNo
+        })
+        .then(response=>{
+          if(response.ok)return response.text();
+          throw new Error("비밀번호 초기화 실패")
+        })
+        .then(result=>{
+          if(result>0) alert("초기화 성공")
+          else alert("초기화 실패")
+        })
+        .catch( err => console.error(err));
+      })
 
       // th > button 만들어서 "탈퇴 상태 변경" 글자 세팅
       const th6 = document.createElement("th");
@@ -117,10 +173,28 @@ const selectMemberList = () => {
       // tr에 만든 th,td 모두 추가
       tr.append(th1, td2, th3, th4, th5, th6);
 
-      
       // #memberList에 tr 추가
       memberList.append(tr);
-      
+
+      chnageBtn.addEventListener("click", () => {
+        fetch("/changeStatus", {
+          method : "PUT",
+          headers : {"content-type" : "application/json"},
+          body : member.memberNo
+        })
+        .then(response=>{
+          if(response.ok)return response.text();
+          throw new Error("탈퇴여부 변경 실패")
+        })
+        .then(result=>{
+//          selectMemberList();
+          if(result>0) alert("변경 성공")
+          else alert("변경 실패")
+        })
+        .catch( err => console.error(err));
+      })
+
+
     })
 
 
@@ -129,3 +203,8 @@ const selectMemberList = () => {
 
 }
   
+
+/* 페이지 로딩(렌더링) 끝난 후 수행 */
+document.addEventListener("DOMContentLoaded",()=>{
+  selectMemberList();
+})
