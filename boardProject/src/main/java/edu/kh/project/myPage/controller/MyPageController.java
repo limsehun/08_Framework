@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.dto.Member;
@@ -232,6 +233,43 @@ public class MyPageController {
 	 * 
 	 * 
 	 */
+	
+	/** 프로필 수정 페이지 전환
+	 * @return
+	 */
+	@GetMapping("profile")
+	public String profile() {
+		return "myPage/myPage-profile";
+	}
+	
+	@PostMapping("profile")
+	public String profile(
+			@RequestParam("profileImg") MultipartFile profileImg,
+			@SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra
+			
+			) {
+		
+		// 1) 로그인 한 회원의 회원번호 얻어오기
+		int memberNo = loginMember.getMemberNo();
+		
+		// 2) 업로드된 이미지로 프로필 이미지 변경하는 서비스 호출
+		String filePath = service.profile(profileImg, memberNo);
+		
+		// 3) 응답 처리
+		String message = null;
+		
+			message = "프로필 이미지가 변경되었습니다";
+			
+			// DB, Session에 저장된 프로필 이미지 정보 동기화
+			loginMember.setProfileImg(filePath);
+
+		ra.addFlashAttribute("message", message);
+		
+		
+		return "redirect:profile"; //  /myPage/profile (GET)
+	}
+	
 	
 	
 }
