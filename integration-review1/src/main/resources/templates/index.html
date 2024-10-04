@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>사원 목록 조회</title>
+</head>
+
+<body>
+
+	<pre>
+		사원 목록 조회 버튼 클릭 시
+		
+		비동기(Ajax)로  "/employee/selectAll" (GET 방식) 요청하여
+		
+		모든 사원의 사번, 이름, 급여를 사번 오름차순으로 
+		
+		id 속성 값이 "empList" 요소에 ul, li 태그 형태로 출력
+	</pre>
+
+	<button type="button" id="selectBtn">사원 목록 조회</button>
+
+	<hr>
+
+	<h3>조회된 사원 목록</h3>
+	<section id="empList">
+
+	</section>
+
+</body>
+
+<script>
+	document.getElementById("selectBtn").addEventListener("click",function () {
+		fetch("/employee/selectAll")
+		.then(response => response.json())
+		.then(data => {
+console.log(data)
+
+			let empList = document.getElementById("empList");
+			empList.innerHTML = ""; 
+
+			if (data.length === 0) {
+
+			empList.innerHTML = "<h1>등록된 사원이 없습니다</h1>";
+			} else {
+			const ul = document.createElement("ul");
+
+
+			data.forEach(function(emp) {
+				var li = document.createElement("li");
+				li.innerText=emp.empId + " / " +emp.empName + " / " + emp.salary
+				ul.appendChild(li);
+			});
+
+			empList.appendChild(ul);
+			}
+
+		}).catch(error => console.error('Error:', error)); 
+	});
+</script>
+
+</html>
