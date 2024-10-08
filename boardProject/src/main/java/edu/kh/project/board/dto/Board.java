@@ -49,5 +49,8 @@ public class Board {
 		
 		// 특정 게시글의 댓글 목록을 저장할 필드
 		private List<Comment> commentList;
+		
+		// 좋아요 체크 여부를 저장하는 필드(1 === 누른적 있음)
+		private int likeCheck;
 	
 }

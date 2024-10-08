@@ -72,23 +72,25 @@ public class EditBoardController {
 		// 2) 서비스 호출 후 결과 반환 받기
 		int boardNo = service.boardInsert(inputBoard, images);
 		
-		// 3) 
-		String path = null;
-		String message = null;
-		
-		if (boardNo == 0 ) { // 실패
+	// 3) 서비스 결과에 따라 응답 제어
+			String path = null;
+			String message = null;
+			
+			if(boardNo == 0) { // 실패
 				path = "insert";
 				message = "게시글 작성 실패";
 			
-		} else {
-//			path = "/board" + boardCode + "/" + boardNo;// 상세조회 주소
-			path = "/board/" + boardCode;
-			message = "게시글이 작성 되었습니다.";
+			} else {
+				path = "/board/" + boardCode + "/" + boardNo; // 상세조회 주소
+			
+//				path = "/board/" + boardCode; // 목록 조회 주소(임시)
+				message = "게시글이 작성 되었습니다";
+			}
+			
+			ra.addFlashAttribute("message", message);
+			
+			return "redirect:" + path;
+			
 		}
-		ra.addAttribute("message",message);
-		
-		
-		return "redirect:" + path;
-	}
 	
 }
