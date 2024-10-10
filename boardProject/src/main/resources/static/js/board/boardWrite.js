@@ -11,7 +11,7 @@ const previewList = document.getElementsByClassName("preview");
 const inputImageList = document.getElementsByClassName("inputImage");
 const deleteImageList = document.getElementsByClassName("delete-image");
 
-// 마지막으로 선택된 파일을 저장할 배열
+// 선택 취소시에도 마지막으로 선택된 파일을 저장할 배열
 const lastValidFiles = [null, null, null, null, null];
 
 /**
@@ -105,6 +105,12 @@ for(let i=0; i<inputImageList.length; i++){
         previewList[i].src      = ""; // 미리보기 제거
         inputImageList[i].value = ""; // 선택된 파일 제거
         lastValidFiles[i]       = null; // 백업 파일 삭제
+
+        // 기존에 존재하던 이미지가 있는 상태에서 X버튼이 눌러졌을때
+        // --> 기존에 이미지가 있었는데 i번쨰 이미지 X버튼 눌러서 삭제함 --> DELETE 수행
+        if(orderList.includes(i)){
+            deleteOrderList.add(i);
+        }
 
     })
 

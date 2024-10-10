@@ -193,4 +193,40 @@ public class EditBoardController {
 		
 	}
 	
+	@PostMapping("{boardCode:[0-9]+}/{boardNo:[0-9]+}/update")
+	public String boardUpdate(
+			
+			@PathVariable("boardCode") int BoardCode,
+			@PathVariable("boardNo") int BoardNo,
+			@ModelAttribute Board inputBoard,
+			@SessionAttribute("loginMember") Member loginMember,
+			@RequestParam("images") List<MultipartFile> images,
+			@RequestParam(value = "deleteOrderList", required = false)
+				String deleteOrderList,
+			RedirectAttributes ra
+			) {
+		
+		// 1. 커맨드 객체 inputBoard에 로그인한 회원 번호 추가
+		inputBoard.setMemberNo(loginMember.getMemberNo());
+		
+		// inputBoard에 세팅된 값
+		// : boardCode, boardNo, boardTitle, boardContent, memberNo
+		
+		
+		// 2. 게시글 수정 서비스 호출 후 결과 반환
+		int result = service.boardUpdate(inputBoard, images, deleteOrderList);
+		
+		String message = null;
+		if(result > 0) {
+			message = "게시글이 수정 되었습니다";
+		} else {
+			message = "수정 실패";
+		}
+
+		ra.addFlashAttribute("message", message);
+		
+
+		return String.format("redirect:/board/%d/%d", BoardCode, BoardNo); // 상세 조회
+	}
+	
 }

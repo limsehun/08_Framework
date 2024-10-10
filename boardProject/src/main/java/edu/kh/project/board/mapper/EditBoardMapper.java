@@ -24,7 +24,39 @@ public interface EditBoardMapper {
 	 */
 	int insertUploadList(List<BoardImg> uploadList);
 
+	/** 게시글 삭제
+	 * @param boardNo
+	 * @param memberNo
+	 * @return result
+	 */
 	int boardDelete(@Param("boardNo")int boardNo, 
 									@Param("memberNo") int memberNo);
+
+	/** 게시글 부분만 수정(제목/내용)
+	 * @param inputBoard
+	 * @return result
+	 */
+	int boardUpdate(Board inputBoard);
+
+	/**
+	 * 기존에 존재하던 이미지 DB에서 삭제
+	 * @param deleteOrderList
+	 * @param boardNo
+	 * @return
+	 */
+	int deleteImage(@Param("orders") String deleteOrderList, @Param("boardNO") int boardNo);
+
+	/**
+	 * 이미지 1행 수정
+	 * @param img
+	 * @return
+	 */
+	int updateImage(BoardImg img);
+
+	/** 새로운 이미지 1행 삽입
+	 * @param img
+	 * @return result
+	 */
+	int insertImage(BoardImg img);
 
 }
