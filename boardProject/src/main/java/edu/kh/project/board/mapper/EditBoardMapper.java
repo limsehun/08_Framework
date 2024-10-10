@@ -3,6 +3,7 @@ package edu.kh.project.board.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import edu.kh.project.board.dto.Board;
 import edu.kh.project.board.dto.BoardImg;
@@ -22,5 +23,8 @@ public interface EditBoardMapper {
 	 * @return
 	 */
 	int insertUploadList(List<BoardImg> uploadList);
+
+	int boardDelete(@Param("boardNo")int boardNo, 
+									@Param("memberNo") int memberNo);
 
 }

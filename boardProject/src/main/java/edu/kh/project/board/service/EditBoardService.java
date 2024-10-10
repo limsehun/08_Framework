@@ -15,4 +15,7 @@ public interface EditBoardService {
 	 */
 	int boardInsert(Board inputBoard, List<MultipartFile> images);
 
+	int boardDelete(int boardNo, int memberNo);
+
+
 }

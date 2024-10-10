@@ -130,4 +130,9 @@ public class EditBoardServiceImple implements EditBoardService{
 		
 		return boardNo;
 	}
+	
+@Override
+	public int boardDelete(int boardNo, int memberNo) {
+		return mapper.boardDelete(boardNo, memberNo);
+	}
 }
