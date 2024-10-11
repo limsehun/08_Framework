@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.kh.project.board.dto.Board;
+import edu.kh.project.board.dto.Comment;
 import edu.kh.project.board.dto.Pagination;
 import edu.kh.project.board.service.BoardService;
 import edu.kh.project.member.dto.Member;
@@ -262,7 +263,46 @@ public class BoardController {
 			return service.boardLike(boardNo, memberNo);
 		}
 	
-	
+	/** 댓글 목록 조회(비동기)
+	 * @param boardNo : 게시글 번호(쿼리스트링 전달 받음)
+	 * @param model : forward 대상에게 데이터를 전달하는 객체
+	 * @return
+	 */
+// @ResponseBody
+	@GetMapping("commentList")
+	public String selectCommentList(
+			@RequestParam("boardNo") int boardNo, Model model) {
+			
+		List<Comment> commentList = service.selectCommentList(boardNo);
+		
+		/* * 보통 비동기 통신(AJAX) 방법
+		 * - 요청 -> 응답 (데이터)
+		 * 
+		 * * forward
+		 * - 요청 위임
+		 * - 요청에 대한 응답 화면(HTML) 생성을 템플릿 엔진(jsp, Thymeleaf)이 대신 수행
+		 * 
+		 * - 동기식 X, 템플릿 엔진을 이용해서 html 코드를 쉽게 생성
+		 * 
+		 * * @responseBody
+		 * - 컨트롤러에서반환되는 값을 응답 본문에 그대로 반환
+		 * 	-> 템플릿 엔진(thymeleaf)을 이용해서 html 코드를 
+		 * 		 만들어서 반환X, 
+		 * 		 데이터를 있는 그대로 반환 O
+		 * 
+		 */
+		// Board 객체 생성
+		Board board = Board.builder().commentList(commentList).build();
+		
+		// "board"라는 key 값으로 생성한 Board 객체를
+		// forward 대상인 comment.html로 전달
+		model.addAttribute("board", board);
+		
+		// comment.html 중  comment-list 조각(fragment)에
+		//comment.html에 작성된 thymeleaf 코드를 해석해서 완정한 HTML 코드로 변환 후
+		// 요청한 곳으로 응답( fetch() API 코드로 html 코드가 반환)
+		return "board/comment :: comment-list";
+	}
 	
 	
 }
