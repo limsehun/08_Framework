@@ -115,3 +115,33 @@ deleteBtn?.addEventListener("click",()=>{
     form.submit();
 
     })
+
+    //---------------------------------------------------------------------------------
+
+    /* 목록으로 버튼 클릭시 */
+    const goToListBtn = document.querySelector("#goToListBtn");
+
+    goToListBtn.addEventListener("click",()=>{
+
+        // 페이지 당 게시글 수
+        const limit = 10;
+
+        let url 
+        = location.pathname + "/goToList?limit=" + limit;
+    
+        // /board/{boardCode}/{boardNo}/goToList?limit=10
+
+        // location.search : 쿼리스트링 반환
+        // URLSearchParams 객체 : 
+        const params = new URLSearchParams(location.search);
+
+        if(params.get("key") !== null){
+            url += `&key=${params.get("key")}&query=${params.get("query")}`; // `` ==  
+        }
+
+        location.href =url;
+        // /board/{boardCode}/{boardNo}/goToList
+        // (검색 X) ?limit=10
+        // (검색 O) ?limit=10&key=t&query=검색어
+
+    })
