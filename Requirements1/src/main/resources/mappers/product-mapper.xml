@@ -5,7 +5,7 @@
 	<select id="selectCategoryList" resultType="map"><!-- resultType="map" -->
 		SELECT 
 			CATEGORY_NO "categoryNo",
-			CATEGORY_NAME "categoryName"
+			CATEGORY_NAME "categoryName" <!-- index에 쓰임 -->
 		FROM CATEGORY
 		ORDER BY CATEGORY_NO ASC
 	</select>

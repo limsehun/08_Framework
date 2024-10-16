@@ -6,11 +6,11 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.kh.test.common.interceptor.CategoryInterceptor;
-@Configuration// Configuration?
+@Configuration// Configuration - 이하 모두 불러
 public class InterceptorConfig implements WebMvcConfigurer{
 	@Bean//bean?
 	public CategoryInterceptor categoryInterceptor() {
-		return new CategoryInterceptor();
+		return new CategoryInterceptor();// 생성자 - CategoryInterceptor를 생성, bean등록
 	}
 	
 	@Override

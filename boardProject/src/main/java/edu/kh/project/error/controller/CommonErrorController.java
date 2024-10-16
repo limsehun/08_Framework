@@ -3,6 +3,7 @@ package edu.kh.project.error.controller;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,11 @@ public class CommonErrorController implements ErrorController{
 		return "error/common-error";
 	}
 	
+	
+	@GetMapping("map-test")
+	public String mapTest() {
+		return "maptest/mapTest";
+	}
 	
 	
 }

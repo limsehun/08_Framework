@@ -22,6 +22,7 @@ public class CategoryInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
+		// application scope 객체 얻어오기
 		ServletContext application = request.getServletContext();
 		
 		if(application.getAttribute("categoryList") == null) {
