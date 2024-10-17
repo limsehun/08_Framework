@@ -1,6 +1,21 @@
-<!-- 공통으로 사용될 css, js 추가 코드-->
+<!-- 공통으로 사용될 css, js 추가 코드--><!-- 여기에 변수 선언하면 헤드 어디든 사용 가능 -->
 <link rel="stylesheet" href="/css/main-style.css">
 
 <!-- font awesome 라이브러리 추가 + key 등록 -->
 <script src="https://kit.fontawesome.com/a373078820.js" crossorigin="anonymous"></script>
+
+<!-- 알림과 관련된 전역 변수-->
+ <script th:inline= "javascript">
+    // 현재 접속한 클라이언트가 로그인 한 상태인지 확인하는 변수
+    // -> 알림은 로그인한 회원만 받을 수 있다.
+    const notificationLoginCheck 
+        = /*[[${session.loginMember}? true : false]]*/ false;
+
+     // 알림을 보낸 회원의 프로필 이미지가 없을 경우 사용할 기본 이미지
+     const notificationDefaultImage
+     = /*[[#{user.default.image}]]*/ '기본이미지';
+
+ </script>
+
+
 <script src="/js/header.js"></script>
