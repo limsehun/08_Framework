@@ -52,6 +52,13 @@ const connectSse = () => {
 
         notificationCountArea.innerText = obj.notiCount;
 
+        /* 만약 알림 목록이 열려있을 경우 */
+        const notificationList = document.querySelector(".notification-list");
+
+        if(notificationList.classList.contains("notification-show")){
+            selectNotificationList(); // 알림 목록 비동기 조회
+        }
+
     });
 
     /* 서버 연결이 종료된 경우(타임아웃 초과) */
@@ -155,7 +162,7 @@ const selectNotificationList = () => {
 
                 // 만약 읽지 않은 알람인 경우
                 if (data.notificationCheck == 'N') {
-                    fetch("/notification", {
+                    fetch("/notification", { // fetch는 AJAX 비동기 요청
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: data.notificationNo
@@ -203,15 +210,15 @@ const selectNotificationList = () => {
                     body: data.notificationNo
                 })
                 .then(resp => {
-                    if (resp.ok) return resp.text();
-                    throw new Error("네트워크 응답이 좋지 않습니다.");
-                })
-                .then(result => {
+                    if (resp.ok) {
                     // 클릭된 x버튼이 포함된 알림 삭제
                     notiDelete.parentElement.remove();
                     notReadCheck();
-
+                    return;
+                    }
+                    throw new Error("네트워크 응답이 좋지 않습니다.");
                 })
+                .catch(err=>console.error(err));
             })
 
             // 조립
@@ -227,13 +234,49 @@ const selectNotificationList = () => {
 
 }
 
+/* 읽지 않은 알림 개수 조회 및 알림 유부 표시 여부 변경 */
+const notReadCheck = () => {
+
+    // 로그인 되어있지 않으면 리턴
+    if(!notificationLoginCheck) return;
+
+    fetch("/notification/notReadCheck")
+    .then(response=>{
+        if (response.ok) return response.text();
+        throw new Error("알림 개수 조회 실패")
+    })
+    .then(count => {
+    // console.log(count); 
+
+    const notificationBtn = document.querySelector(".notification-btn");
+    
+    const notificationCountArea = document.querySelector(".notification-count-area");
+    
+    // 알림 개수를 화면에 표시
+    notificationCountArea.innerText = count;
+
+    // 읽지 않은 알림 수가 0보다 크면 == 읽지 않은 알림이 존재한다 == 노란색으로 불 들어오게 하기
+    if (count > 0) {
+        notificationBtn.classList.add("fa-solid");
+        notificationBtn.classList.remove("fa-regular");
+    }else { // 모든 알림을 읽은 상태
+        notificationBtn.classList.add("fa-regular");
+        notificationBtn.classList.remove("fa-solid");
+    }
+    })
+    .catch(err => console.error(err));
+
+}
+
 
 // ----------------------------------------------
 
 // 페이지 로딩 완료 후 수행
 document.addEventListener("DOMContentLoaded", () => {
-    connectSse();
+    connectSse(); // SSE 연결
   
+    notReadCheck(); // 알림 개수 조회
+
     // 종 버튼(알림) 클릭 시 알림 목록이 출력하기
     const notificationBtn 
       = document.querySelector(".notification-btn");
@@ -255,6 +298,33 @@ document.addEventListener("DOMContentLoaded", () => {
             notificationList.classList.add("notification-show");
         }
 
-    })
+    });
+
+
+    /* 
+    쿼리스트링 중 cn(댓글번호)가 존재하는 경우 
+    해당 댓글을 찾아 화면을 스크롤해서 이동하기 
+    */
+
+    // 쿼리스트링 다룰 수 있는 객체
+   const params = new URLSearchParams(location.search);
+   const cn = params.get("cn"); // cn 값 얻어오기
+
+   if(cn!=null){ // cn이 존재하는 경우에만
+    const targetId = "c" + cn; // "c100" , "c1234" 형태로 변환
+
+    // 아이디가 일치하는 댓글 요소 얻어오기
+    const target = document.getElementById(targetId)
+
+    // 댓글 요소가 제일 위애서 얼마만큼 떨어져 있는지 반환 받기
+    const scrollPosition = target.offsetTop;
+
+    // 창을 스크롤
+    window.scrollTo({
+        top : scrollPosition -200 , // 스크롤할 길이
+        behavior : "smooth" // 부드럽게 동작(행동)하도록 지정
+    });
+
+   }
   
 })
