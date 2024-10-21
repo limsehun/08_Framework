@@ -92,6 +92,7 @@
   		</foreach>
   	</insert>
   	
+  		<!-- 게시글 삭제 -->
   	<update id="boardDelete">
   		UPDATE "BOARD"
   		SET BOARD_DEL_FL = 'Y'
